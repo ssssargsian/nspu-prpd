@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database name="UniPlay" version="1.0">
+  <table name="students">
+    <column name="student_id" type="integer" primaryKey="true" />
+    <column name="name" type="varchar" />
+    <column name="university" type="varchar" />
+  </table>
+
+  <table name="users">
+    <column name="user_id" type="integer" primaryKey="true" />
+    <column name="username" type="varchar" />
+    <column name="email" type="varchar" />
+    <column name="role" type="varchar" />
+    <column name="created_at" type="timestamp" />
+  </table>
+
+  <table name="teams">
+    <column name="team_id" type="integer" primaryKey="true" />
+    <column name="team_name" type="varchar" />
+    <column name="rating" type="integer" default="0" />
+  </table>
+
+  <table name="games">
+    <column name="game_id" type="integer" primaryKey="true" />
+    <column name="title" type="varchar" />
+    <column name="genre" type="varchar" />
+  </table>
+
+  <table name="tournaments">
+    <column name="tournament_id" type="integer" primaryKey="true" />
+    <column name="name" type="varchar" />
+    <column name="prize" type="decimal" precision="10" scale="2" />
+    <column name="date" type="date" />
+    <column name="game_id" type="integer" />
+  </table>
+
+  <table name="organizers">
+    <column name="organizer_id" type="integer" primaryKey="true" />
+    <column name="name" type="varchar" />
+    <column name="contact_info" type="varchar" />
+  </table>
+
+  <table name="matches">
+    <column name="match_id" type="integer" primaryKey="true" />
+    <column name="tournament_id" type="integer" />
+    <column name="team_1_id" type="integer" />
+    <column name="team_2_id" type="integer" />
+    <column name="result" type="varchar" />
+    <column name="match_date" type="date" />
+    <column name="admin_user_id" type="integer" default="null" />
+  </table>
+
+  <table name="tournament_registrations">
+    <column name="registration_id" type="integer" primaryKey="true" />
+    <column name="student_id" type="integer" />
+    <column name="tournament_id" type="integer" />
+    <column name="team_id" type="integer" />
+    <column name="registration_date" type="date" />
+  </table>
+
+  <table name="tournament_organizers">
+    <column name="tournament_id" type="integer" />
+    <column name="organizer_id" type="integer" />
+  </table>
+
+  <foreign-key table="tournaments" column="game_id" references="games" />
+  <foreign-key table="matches" column="tournament_id" references="tournaments" />
+  <foreign-key table="matches" column="team_1_id" references="teams" />
+  <foreign-key table="matches" column="team_2_id" references="teams" />
+  <foreign-key table="matches" column="admin_user_id" references="users" onDelete="set null" />
+  <foreign-key table="tournament_registrations" column="student_id" references="students" />
+  <foreign-key table="tournament_registrations" column="tournament_id" references="tournaments" />
+  <foreign-key table="tournament_registrations" column="team_id" references="teams" />
+  <foreign-key table="tournament_organizers" column="tournament_id" references="tournaments" />
+  <foreign-key table="tournament_organizers" column="organizer_id" references="organizers" />
+</database>
