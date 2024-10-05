@@ -1,0 +1,27 @@
+services:
+  postgres:
+    build: .
+    container_name: uniplay-postgres
+    environment:
+      POSTGRES_DB: uniplay_db
+      POSTGRES_USER: uniplay_user
+      POSTGRES_PASSWORD: uniplay_password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql  # Добавляем файл схемы
+    ports:
+      - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: uniplay-adminer
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+
+volumes:
+  postgres_data:
+    driver: local
